@@ -1,11 +1,11 @@
 export default {
   state: {
+    message: [],
     visible: false,
-    message: "",
   },
   mutations: {
     ERROR(state, payload) {
-      state.message = payload;
+      state.message.push(payload);
       state.visible = true;
       setTimeout(() => {
         state.visible = false;
@@ -19,6 +19,7 @@ export default {
   },
   getters: {
     errorVisible: (state) => {
+      console.log(state);
       return state;
     },
   },

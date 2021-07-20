@@ -124,7 +124,14 @@ export default {
       this.posts.avatar = "";
     },
     addPost() {
-      this.$store.dispatch("NEW_POST", this.posts, false);
+      if (this.posts.title && this.posts.body) {
+        this.$store.dispatch("NEW_POST", this.posts, false);
+      } else {
+        this.$store.dispatch(
+          "ERROR_MODAL",
+          "Поле 'Заголовок' и 'Описание' пустые"
+        );
+      }
     },
   },
 };

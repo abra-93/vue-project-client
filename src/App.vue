@@ -11,9 +11,10 @@
     <div class="container-page">
       <router-view />
     </div>
-    <my-error :visible="errorVisible.visible">{{
-      errorVisible.message
-    }}</my-error>
+    <my-error :visible="errorVisible.visible">
+      <strong>ОШИБКА!!!</strong><br />
+      {{ errorVisible.message }}</my-error
+    >
   </div>
 </template>
 <script>
@@ -41,9 +42,7 @@ export default {
     //   return this.$store.getters.errorVisible;
     // },
   },
-  updated() {
-    console.log(this.errorVisible);
-  },
+
   methods: {
     hideModal() {
       console.log("HHHH");
