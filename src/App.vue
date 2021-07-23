@@ -11,10 +11,14 @@
     <div class="container-page">
       <router-view />
     </div>
-    <my-error :visible="errorVisible.visible">
-      <strong>ОШИБКА!!!</strong><br />
-      {{ errorVisible.message }}</my-error
-    >
+    <my-error
+      :message="error"
+      width="300"
+      position="bottom right"
+      speed="99"
+      duration="3000"
+      @click="close"
+    />
   </div>
 </template>
 <script>
@@ -31,21 +35,16 @@ export default {
       isModal: "",
     };
   },
-
+  updated() {
+    console.log(this.error);
+  },
   computed: {
-    ...mapGetters(["isModalShow", "errorVisible"]),
-    // isModalShow() {
-    //   return this.$store.getters.isModalShow;
-    // },
-    // errorVisible() {
-    //   console.log(this.$store.getters.errorVisible);
-    //   return this.$store.getters.errorVisible;
-    // },
+    ...mapGetters(["isModalShow", "error"]),
   },
 
   methods: {
-    hideModal() {
-      console.log("HHHH");
+    close(index) {
+      this.$store.dispatch("DELETE_MSG", index);
     },
   },
 };
@@ -55,4 +54,13 @@ export default {
 .container-page {
   margin-left: 320px;
 }
+// .error-fade-enter-active .error-fade-move {
+//   transition: all 600ms ease-in-out 50ms;
+// }
+
+// .error-fade-enter,
+// .error-fade-leave-to {
+//   opacity: 1;
+//   transform: translateY(500px);
+// }
 </style>
