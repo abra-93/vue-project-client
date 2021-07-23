@@ -104,7 +104,9 @@ export default {
       });
     },
     uploadArrayImage() {
+      console.log("ffff");
       const files = this.$refs.fileArray.files;
+
       if (files.length <= 2) {
         this.posts.image.push(...files);
 
@@ -116,7 +118,10 @@ export default {
           reader.readAsDataURL(file);
         });
       } else {
-        this.$store.dispatch("ERROR_MODAL", "Привышено число картинок");
+        this.$store.dispatch("ERROR_MODAL", {
+          id: new Date().getUTCMilliseconds(),
+          text: "Привышено число картинок",
+        });
       }
     },
     removeFoto() {
@@ -124,13 +129,14 @@ export default {
       this.posts.avatar = "";
     },
     addPost() {
+      // let id = new Date().getUTCMilliseconds();
       if (this.posts.title && this.posts.body) {
         this.$store.dispatch("NEW_POST", this.posts, false);
       } else {
-        this.$store.dispatch(
-          "ERROR_MODAL",
-          "Поле 'Заголовок' и 'Описание' пустые"
-        );
+        this.$store.dispatch("ERROR_MODAL", {
+          id: new Date().getUTCMilliseconds(),
+          text: "Поле 'Заголовок' и 'Описание' пустые ",
+        });
       }
     },
   },

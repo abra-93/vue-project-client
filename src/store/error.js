@@ -1,26 +1,31 @@
 export default {
   state: {
     message: [],
-    visible: false,
   },
   mutations: {
     ERROR(state, payload) {
       state.message.push(payload);
-      state.visible = true;
+
+      // удаляем элементы массива через некоторое время
       setTimeout(() => {
-        state.visible = false;
-      }, 2000);
+        state.message.shift();
+      }, 5000);
+    },
+    DELETE(state, index) {
+      state.message.splice(index, 1);
     },
   },
   actions: {
-    ERROR_MODAL: (context, payload) => {
-      context.commit("ERROR", payload);
+    ERROR_MODAL: ({ commit }, payload) => {
+      commit("ERROR", payload);
+    },
+    DELETE_MSG: ({ commit }, index) => {
+      commit("DELETE", index);
     },
   },
   getters: {
-    errorVisible: (state) => {
-      console.log(state);
-      return state;
+    error: ({ message }) => {
+      return message;
     },
   },
 };

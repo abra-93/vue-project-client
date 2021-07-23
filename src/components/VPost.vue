@@ -41,8 +41,9 @@ export default {
   mounted() {
     if (this.post.avatar) this.updateFoto();
 
-    if (!this.post.image) this.bgImageFon();
+    if (this.post.image) this.bgImageFon();
   },
+
   methods: {
     updateFoto() {
       const file = this.post.avatar;
@@ -55,7 +56,6 @@ export default {
     bgImageFon() {
       const file = this.post.image[0];
       const reader = new FileReader();
-      console.log(this.post);
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.bgImage = reader.result;
