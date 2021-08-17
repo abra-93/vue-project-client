@@ -1,6 +1,7 @@
 export default {
   state: {
     message: [],
+    // messageSuccess: [],
   },
   mutations: {
     ERROR(state, payload) {
@@ -19,13 +20,13 @@ export default {
     ERROR_MODAL: ({ commit }, payload) => {
       commit("ERROR", payload);
     },
-    DELETE_MSG: ({ commit }, index) => {
-      commit("DELETE", index);
-    },
   },
   getters: {
     error: ({ message }) => {
       return message;
     },
+    // success: ({ messageSuccess }) => {
+    //   return messageSuccess;
+    // },
   },
 };

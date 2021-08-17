@@ -2,14 +2,13 @@
   <div class="home">
     <div class="home__header">
       <div class="home__header-wrap container">
-        <my-button @click.native="$store.dispatch('ACTION_MODAL', true)"
-          >Добавить пост</my-button
-        >
+        <my-button @click.native="modal">Добавить пост</my-button>
       </div>
     </div>
     <section class="home__posts posts container">
+      <div class="loading"></div>
       <div class="posts__wrap">
-        <v-post v-for="post in newPost" :key="post.id" :post="post" />
+        <v-post v-for="post in allPosts" :key="post.id" :post="post" />
       </div>
     </section>
   </div>
@@ -18,24 +17,25 @@
 <script>
 import MyButton from "@/components/ui/MyButton.vue";
 import VPost from "@/components/VPost.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Home",
   components: { MyButton, VPost },
   data() {
-    return {};
+    return {
+      isLoad: false,
+      posts: "",
+    };
   },
 
   computed: {
-    newPost() {
-      return this.$store.getters.newPost;
-    },
+    ...mapGetters(["allPosts"]),
   },
-  updated() {
-    // console.log(this.newPost);
+  methods: mapActions(["getPosts", "modal"]),
+  mounted() {
+    this.getPosts();
   },
-
-  methods: {},
 };
 </script>
 

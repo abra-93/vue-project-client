@@ -4,11 +4,11 @@
       <li
         class="error__item"
         v-for="(msg, index) in message"
-        :key="msg.id"
+        :key="index"
         :data-id="index"
         @click.stop="close(index)"
       >
-        <strong>ОШИБКА # </strong><br />
+        <!-- <strong>ОШИБКА # </strong><br /> -->
         {{ msg.text }}
       </li>
     </transition-group>
@@ -20,8 +20,6 @@ export default {
   props: {
     message: Array,
     width: [String, Number],
-    speed: [String, Number],
-    duration: [String, Number],
     position: {
       type: [String, Number, Object],
     },
@@ -66,6 +64,7 @@ export default {
   transition: all 0.4s ease;
 
   &__item {
+    display: flex;
     padding: 10px;
     background: #e54d42;
     border-radius: 5px;
@@ -73,7 +72,7 @@ export default {
     margin: 5px;
     position: relative;
     cursor: pointer;
-    display: inline-block;
+    // display: inline-block;
 
     &::after {
       content: "";
@@ -86,6 +85,13 @@ export default {
       border-radius: 5px 0 0 5px;
     }
   }
+}
+
+.success-msg {
+  background: #188e18;
+}
+.error-msg {
+  background: #e54d42;
 }
 .error-fade-enter-active,
 .error-fade-leave-active,

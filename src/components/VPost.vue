@@ -1,23 +1,43 @@
 <template>
-  <div class="post">
+  <div
+    class="post"
+    @click="$router.push({ name: 'Post', params: { id: post._id } })"
+  >
     <div class="post__wrap">
       <div class="post__image-content">
         <div class="post__image">
-          <img :src="bgImage" alt="" />
-        </div>
-        <div class="post__avatar avatar">
-          <div class="avatar__wrap ">
-            <img :src="previewFoto" alt="" />
-          </div>
+          <img :src="post.images[0]" alt="" />
         </div>
       </div>
 
       <div class="post__content">
-        <div class="post__title">
-          <h2>{{ post.title }}</h2>
+        <div class="post__avatar avatar">
+          <div class="avatar__wrap ">
+            <img :src="post.avatar ? post.avatar : previewFoto" alt="" />
+          </div>
         </div>
-        <div class="post__body">
-          <span>{{ post.body }}</span>
+        <div class="post__content-wrap">
+          <div class="post__title">
+            <h2>{{ post.title }}</h2>
+          </div>
+          {{ $route.params.id }}
+          <div class="post__body">
+            <span>{{ post.body }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="post__footer">
+        <div class="post__footer-wrap">
+          <button><my-icons name="comment" size="25px" /></button>
+          <button @click.stop="like">
+            <my-icons
+              name="heart"
+              size="25px"
+              :color="colorIcon ? 'red' : 'black'"
+            />
+            <span>{{ post.likes.length }}</span>
+          </button>
+          <button><my-icons name="share" size="25px" /></button>
         </div>
       </div>
     </div>
@@ -25,7 +45,9 @@
 </template>
 
 <script>
+import MyIcons from "./ui/MyIcons.vue";
 export default {
+  components: { MyIcons },
   name: "v-post",
   props: {
     post: Object,
@@ -34,32 +56,31 @@ export default {
   data() {
     return {
       previewFoto: require("@/assets/placeholder.png"),
-      bgImage: "",
+      colorIcon: false,
     };
   },
 
-  mounted() {
-    if (this.post.avatar) this.updateFoto();
+  computed: {},
 
-    if (this.post.image) this.bgImageFon();
+  mounted() {
+    this.likesIconActive();
   },
 
   methods: {
-    updateFoto() {
-      const file = this.post.avatar;
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.previewFoto = reader.result;
-      };
+    like() {
+      this.colorIcon = !this.colorIcon;
+      this.$store.dispatch("likes", {
+        postId: this.post._id,
+        userId: +localStorage.getItem("userId"),
+      });
     },
-    bgImageFon() {
-      const file = this.post.image[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.bgImage = reader.result;
-      };
+    likesIconActive() {
+      const id = localStorage.getItem("userId");
+      this.post.likes.forEach((elem) => {
+        if (elem === +id) {
+          this.colorIcon = true;
+        }
+      });
     },
   },
 };
@@ -70,13 +91,27 @@ export default {
   // .post__wrap
   &__wrap {
     width: 100%;
-    height: 100%;
+    height: auto;
     position: relative;
-    padding-bottom: 45px;
     overflow: hidden;
     box-shadow: 0px 0px 5px grey;
-    border: 1px solid #ddd;
     background: #fff;
+    cursor: pointer;
+    // &::after {
+    //   content: "";
+    //   text-align: center;
+    //   position: absolute;
+    //   bottom: 0;
+    //   right: 0;
+    //   width: 100%;
+    //   height: 100px;
+    //   background: linear-gradient(
+    //     to bottom,
+    //     rgba(255, 255, 255, 0),
+    //     white 100%
+    //   );
+    //   pointer-events: none;
+    // }
   }
   // .post__image-content
   &__image-content {
@@ -86,6 +121,10 @@ export default {
   &__image {
     height: 150px;
     overflow: hidden;
+
+    img {
+      object-fit: cover;
+    }
   }
   // .post__avatar
   &__avatar {
@@ -93,18 +132,49 @@ export default {
     display: flex;
     justify-content: center;
     position: absolute;
-    bottom: -40px;
+    top: -60px;
   }
+
   // .post__content
   &__content {
-    margin-top: 50px;
     text-align: center;
+    max-height: 150px;
+    position: relative;
+    background: #fff;
+    transition: 0.4s ease-in-out;
+  }
+  &__content-wrap {
+    padding: 50px 5px 10px 5px;
   }
   // .post__title
   &__title {
   }
   // .post__body
   &__body {
+  }
+  // .post__footer
+  &__footer {
+  }
+  // .post__footer-wra
+  &__footer-wrap {
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    position: relative;
+    button {
+      flex: 1 1 auto;
+      border: none;
+      background: rgba(255, 255, 255, 0);
+      cursor: pointer;
+    }
+  }
+
+  &:hover .post__content {
+    transform: translateY(-80px);
+    transition: 0.4s ease-in-out;
   }
 }
 .avatar {
@@ -123,50 +193,4 @@ export default {
     }
   }
 }
-
-// .post {
-//   // flex: 1 1 300px;
-//   transition: 0.4s cubic-bezier(0.39, 0.58, 0.57, 1);
-//   &__wrap {
-//     width: 100%;
-//     height: 100%;
-//     position: relative;
-//     padding-bottom: 45px;
-//     overflow: hidden;
-//     box-shadow: 0px 0px 5px grey;
-//     border: 1px solid #ddd;
-//     background: #fff;
-//   }
-//   &__image-wrap {
-//     height: 100%;
-//     position: relative;
-//   }
-//   &__image {
-//     max-height: 200px;
-//     overflow: hidden;
-//   }
-//   &__avatar {
-//     width: 100%;
-//     display: flex;
-//     justify-content: center;
-//     position: absolute;
-//     bottom: -40px;
-//   }
-// }
-// .avatar {
-//   // .avatar__wrap
-//   &__wrap {
-//     width: 100px;
-//     height: 100px;
-//     border-radius: 100%;
-//     overflow: hidden;
-//     border: 1px solid grey;
-//     position: relative;
-
-//     img {
-//       object-fit: cover;
-//       height: 100%;
-//     }
-//   }
-// }
 </style>
