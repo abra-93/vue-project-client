@@ -8,7 +8,7 @@
         <div class="post-form__avatar avatar">
           <div class="avatar__wrap">
             <input
-              @change="uploadFile()"
+              @change="uploadAvatar()"
               type="file"
               ref="file"
               accept="image/*"
@@ -66,8 +66,8 @@
 import MyButton from "./ui/MyButton.vue";
 import MyInput from "./ui/MyInput.vue";
 import MyTextarea from "./ui/MyTextarea.vue";
-// import placeholder from "@/assets/placeholder.png";
 import MyIcons from "./ui/MyIcons.vue";
+import { mapActions } from "vuex";
 export default {
   components: { MyInput, MyButton, MyTextarea, MyIcons },
   data() {
@@ -75,7 +75,7 @@ export default {
       previewFoto: require("@/assets/placeholder.png"),
       previewArrayFoto: [],
       posts: {
-        id: new Date().getUTCMilliseconds(),
+        id: Date.now(),
         avatar: "",
         title: "",
         body: "",
@@ -84,7 +84,6 @@ export default {
       btnUploadAvatar: true,
       btnRemoveAvatar: false,
       btnUploadImage: true,
-      errorMessage: false,
     };
   },
   watch: {
@@ -94,9 +93,12 @@ export default {
   },
 
   methods: {
-    uploadFile() {
+    uploadAvatar() {
+      // const fd = new FormData();
       const file = this.$refs.file.files[0];
+      // fd.append("avatar", file);
       this.posts.avatar = file;
+      // this.posts.avatar = file;
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.addEventListener("load", () => {
@@ -104,10 +106,9 @@ export default {
       });
     },
     uploadArrayImage() {
-      console.log("ffff");
       const files = this.$refs.fileArray.files;
 
-      if (files.length <= 2) {
+      if (files.length <= 3) {
         this.posts.image.push(...files);
 
         [...files].forEach((file) => {
@@ -119,7 +120,7 @@ export default {
         });
       } else {
         this.$store.dispatch("ERROR_MODAL", {
-          id: new Date().getUTCMilliseconds(),
+          id: Date.now(),
           text: "Привышено число картинок",
         });
       }
@@ -128,13 +129,14 @@ export default {
       this.previewFoto = require("@/assets/placeholder.png");
       this.posts.avatar = "";
     },
+    ...mapActions(["NEW_POST", "ERROR_MODAL", "getPosts"]),
     addPost() {
-      // let id = new Date().getUTCMilliseconds();
       if (this.posts.title && this.posts.body) {
-        this.$store.dispatch("NEW_POST", this.posts, false);
+        this.NEW_POST(this.posts);
+        this.getPosts();
       } else {
-        this.$store.dispatch("ERROR_MODAL", {
-          id: new Date().getUTCMilliseconds(),
+        this.ERROR_MODAL({
+          id: Date.now(),
           text: "Поле 'Заголовок' и 'Описание' пустые ",
         });
       }

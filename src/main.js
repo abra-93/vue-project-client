@@ -3,13 +3,14 @@ import App from "./App.vue";
 
 import router from "./router";
 import store from "./store";
+// import socket from "./plugins/socket";
+// import axios from "axios";
 
 import "@/scss/index.scss"; // global style
 
-// import Notifications from "vue-notification";
-// Vue.use(Notifications);
-
 Vue.config.productionTip = false;
+
+// Vue.use(axios);
 
 new Vue({
   router,
