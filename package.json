@@ -28,5 +28,17 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.11"
-  }
+  },
+  "description": "```\r npm install\r ```",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alex-maskall/vue-project-client.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alex-maskall/vue-project-client/issues"
+  },
+  "homepage": "https://github.com/alex-maskall/vue-project-client#readme"
 }

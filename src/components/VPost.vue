@@ -6,14 +6,14 @@
     <div class="post__wrap">
       <div class="post__image-content">
         <div class="post__image">
-          <img :src="post.images[0]" alt="" />
+          <img :src="bgFon" alt="" />
         </div>
       </div>
 
       <div class="post__content">
         <div class="post__avatar avatar">
           <div class="avatar__wrap ">
-            <img :src="post.avatar ? post.avatar : previewFoto" alt="" />
+            <img :src="avatar" alt="" />
           </div>
         </div>
         <div class="post__content-wrap">
@@ -28,7 +28,7 @@
       </div>
       <div class="post__footer">
         <div class="post__footer-wrap">
-          <button><my-icons name="comment" size="25px" /></button>
+          <!-- <button><my-icons name="comment" size="25px" /></button> -->
           <button @click.stop="like">
             <my-icons
               name="heart"
@@ -37,7 +37,9 @@
             />
             <span>{{ post.likes.length }}</span>
           </button>
-          <button><my-icons name="share" size="25px" /></button>
+          <button @click.stop="copuLink">
+            <my-icons name="share" size="25px" />
+          </button>
         </div>
       </div>
     </div>
@@ -56,11 +58,19 @@ export default {
   data() {
     return {
       previewFoto: require("@/assets/placeholder.png"),
+      previewFon: require("@/assets/placeholder-image.jpg"),
       colorIcon: false,
     };
   },
 
-  computed: {},
+  computed: {
+    avatar() {
+      return this.post.avatar ? this.post.avatar : this.previewFoto;
+    },
+    bgFon() {
+      return this.post.images[0] ? this.post.images[0] : this.previewFon;
+    },
+  },
 
   mounted() {
     this.likesIconActive();
@@ -80,6 +90,13 @@ export default {
         if (elem === +id) {
           this.colorIcon = true;
         }
+      });
+    },
+    copuLink() {
+      const link = location.href + "post/" + this.post._id;
+      window.navigator.clipboard.writeText(link);
+      this.$store.dispatch("ERROR_MODAL", {
+        text: "ссылка скопированна",
       });
     },
   },

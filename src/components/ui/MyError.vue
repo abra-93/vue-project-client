@@ -43,6 +43,18 @@ export default {
       }
       return obj;
     },
+    // color() {
+    //   let type;
+    //   this.message.forEach((item, index) => {
+    //     console.log(item, index);
+    //     if (item.type === "success") {
+    //       type = "background: seagreen";
+    //     } else if (item.type === "error") {
+    //       type = "background: #e54d42;";
+    //     }
+    //   });
+    //   return type;
+    // },
   },
 
   methods: {
